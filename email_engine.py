@@ -6,6 +6,11 @@ import requests
 import re
 import random
 
+def subdomain(domain):
+	domain = domain.replace("https://","")
+	domain = domain.replace("http://","")
+	domain = domain.replace("www.", "") # May replace some false positives ('www.com')
+	return domain.split('/')[0]
 
 def convert_tags(text):
     for e in '''<KW> </KW> </a> <br> </br> <b> </b> </div> <em> </em> <p> </span>
@@ -28,6 +33,7 @@ f = open('user_agents','r')
 user_agents_list = [k.rstrip('\n') for k in f]
 
 def get_emails(domain):
+    domain = subdomain(domain)
     no = 5
     url = 'https://www.google.com/search?num=100&start={counter}&hl=en&q="%40{domain}"'
     userAgent = random.choice(user_agents_list)
